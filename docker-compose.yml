@@ -1,0 +1,45 @@
+version: "3"
+services:
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+    restart: "always"
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+    container_name: elasticsearch
+    networks:
+      - default
+
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    restart: "always"
+    container_name: kibana
+    volumes:
+      - ./kibana/kibana.yml:/etc/kibana/kibana.yml
+    networks:
+      - default
+
+  logstash:
+    image: logstash
+    ports:
+      - "4560:4560"
+      - "4561:4561"
+      - "9600:9600"
+    restart: "always"
+    container_name: logstash
+    volumes:
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
+      - ./logstash/logstash.yml:/etc/logstash/logstash.yml
+    networks:
+      - default
+      
+networks:
+  default:
+    external:
+      name: magi-network
+
+
+
