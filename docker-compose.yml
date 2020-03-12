@@ -26,7 +26,6 @@ services:
     image: logstash
     ports:
       - "4560:4560"
-      - "4561:4561"
       - "9600:9600"
     restart: "always"
     container_name: logstash
