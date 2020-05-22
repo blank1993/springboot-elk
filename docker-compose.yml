@@ -1,10 +1,14 @@
 version: "3"
 services:
   elasticsearch:
-    image: elasticsearch
+    image: elasticsearch:7.7.0
     ports:
       - "9200:9200"
     restart: "always"
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - ./elasticsearch:/usr/share/elasticsearch/data
     container_name: elasticsearch
@@ -12,7 +16,7 @@ services:
       - default
 
   kibana:
-    image: kibana
+    image: kibana:7.7.0
     ports:
       - "5601:5601"
     restart: "always"
@@ -23,7 +27,7 @@ services:
       - default
 
   logstash:
-    image: logstash
+    image: logstash:7.7.0
     ports:
       - "4560:4560"
       - "9600:9600"
@@ -31,10 +35,10 @@ services:
     container_name: logstash
     volumes:
       - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
-      - ./logstash/logstash.yml:/etc/logstash/logstash.yml
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
     networks:
       - default
-      
+
 networks:
   default:
     external:
