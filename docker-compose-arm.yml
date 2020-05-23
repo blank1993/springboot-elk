@@ -1,0 +1,48 @@
+version: "3"
+services:
+  elasticsearch:
+    image:  registry.cn-shenzhen.aliyuncs.com/gddlkj-armv8/elasticsearch:7.6.2
+    ports:
+      - "9200:9200"
+    restart: "always"
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+    container_name: elasticsearch
+    networks:
+      - default
+
+  kibana:
+    image: registry.cn-shenzhen.aliyuncs.com/gddlkj-armv8/kibana:7.6.2
+    ports:
+      - "5601:5601"
+    restart: "always"
+    container_name: kibana
+    volumes:
+      - ./kibana/kibana.yml:/etc/kibana/kibana.yml
+    networks:
+      - default
+
+  logstash:
+    image: registry.cn-shenzhen.aliyuncs.com/gddlkj-armv8/logstash:7.6.2
+    ports:
+      - "4560:4560"
+      - "9600:9600"
+    restart: "always"
+    container_name: logstash
+    volumes:
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: magi-network
+
+
+
