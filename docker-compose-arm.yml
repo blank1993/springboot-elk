@@ -22,7 +22,7 @@ services:
     restart: "always"
     container_name: kibana
     volumes:
-      - ./kibana/kibana.yml:/etc/kibana/kibana.yml
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       - default
 
